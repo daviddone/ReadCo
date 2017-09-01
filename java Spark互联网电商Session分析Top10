@@ -1,0 +1,78 @@
+项目主要知识点：
+Spark技术生态栈中最常用的三个技术框架，Spark Core、Spark SQL和Spark Streaming，进行离线计算和实时计算业务模块的开发。
+实现了包括用户访问session分析、页面单跳转化率统计、热门商品离线统计、广告流量实时统计4个业务模块。
+
+./SprakProject/src/main/java/com/erik/sparkproject/App.java
+./SprakProject/src/main/java/com/erik/sparkproject/util/ParamUtils.java
+./SprakProject/src/main/java/com/erik/sparkproject/util/DateUtils.java
+./SprakProject/src/main/java/com/erik/sparkproject/util/StringUtils.java
+./SprakProject/src/main/java/com/erik/sparkproject/util/ValidUtils.java
+./SprakProject/src/main/java/com/erik/sparkproject/util/NumberUtils.java
+./SprakProject/src/main/java/com/erik/sparkproject/constant/Constants.java
+工具模块
+日期转换 时间差秒  
+格式化小数四舍五入的位数
+校验字符串 
+
+
+./SprakProject/src/main/java/com/erik/sparkproject/spark/session/CategorySortKey.java
+./SprakProject/src/main/java/com/erik/sparkproject/spark/session/SesssionAggrStatAccumulator.java
+./SprakProject/src/main/java/com/erik/sparkproject/spark/session/UserVisitSessionAnalyzeSpark.java
+类别排序 品类二次排序key  封装你要进行排序算法需要的几个字段；点击次数、下单次数和支付次数。实现了Scala中的ordered接口，类似Java中的compare接口。
+session聚合统计Accumulator 
+### 入口类 重点1667行： session用户访问分析 
+
+./SprakProject/src/main/java/com/erik/sparkproject/impl/SessionAggrStatDAOImpl.java
+./SprakProject/src/main/java/com/erik/sparkproject/impl/SessionDetailDAOImpl.java
+./SprakProject/src/main/java/com/erik/sparkproject/impl/Top10SessionDAOImpl.java
+./SprakProject/src/main/java/com/erik/sparkproject/impl/Top10CategoryDAOImpl.java
+./SprakProject/src/main/java/com/erik/sparkproject/impl/TaskDAOImpl.java
+./SprakProject/src/main/java/com/erik/sparkproject/impl/SessinoRandomExtractDAOImpl.java
+实现所有I*DAO的接口类
+插入：session_aggr_stat
+插入：session明细DAO实现类
+插入session随机抽取
+根据主键查询任务
+插入top10品类DAO实现
+插入top10活跃session的DAO实现 insert into top10_session values(?,?,?,?)
+
+./SprakProject/src/main/java/com/erik/sparkproject/dao/ISessionDetailDAO.java
+./SprakProject/src/main/java/com/erik/sparkproject/dao/ISessionAggrStatDAO.java
+./SprakProject/src/main/java/com/erik/sparkproject/dao/factory/DAOFactory.java
+./SprakProject/src/main/java/com/erik/sparkproject/dao/ISessionRandomExtractDAO.java
+./SprakProject/src/main/java/com/erik/sparkproject/dao/ITaskDAO.java
+./SprakProject/src/main/java/com/erik/sparkproject/dao/ITop10CategoryDAO.java
+./SprakProject/src/main/java/com/erik/sparkproject/dao/ITop10SessionDAO.java
+./SprakProject/src/main/java/com/erik/sparkproject/conf/ConfigurationManager.java
+
+ DAO工厂类： 获取任务管理DAO 获取session聚合统计DAO 
+ I*DAO 接口类：定义接口方法。
+ 配置文件读取类
+
+
+./SprakProject/src/main/java/com/erik/sparkproject/test/JDBChelperTest.java
+./SprakProject/src/main/java/com/erik/sparkproject/test/ConfigurationManagerTest.java
+./SprakProject/src/main/java/com/erik/sparkproject/test/Singleton.java
+./SprakProject/src/main/java/com/erik/sparkproject/test/JdbcCRUD.java
+./SprakProject/src/main/java/com/erik/sparkproject/test/MockData.java
+./SprakProject/src/main/java/com/erik/sparkproject/test/TaskDAOTest.java
+./SprakProject/src/main/java/com/erik/sparkproject/test/FastjsonTest.java
+测试模块：
+
+./SprakProject/src/main/java/com/erik/sparkproject/jdbc/JDBCHelper.java
+封装了数据库连接池，数据库常用操作的方法。
+./SprakProject/src/main/java/com/erik/sparkproject/domain/SessionAggrStat.java
+./SprakProject/src/main/java/com/erik/sparkproject/domain/SessionDetail.java
+./SprakProject/src/main/java/com/erik/sparkproject/domain/Task.java
+./SprakProject/src/main/java/com/erik/sparkproject/domain/Top10Category.java
+./SprakProject/src/main/java/com/erik/sparkproject/domain/SessionRandomExtract.java
+./SprakProject/src/main/java/com/erik/sparkproject/domain/Top10Session.java
+session聚合统计
+session明细
+Task任务 
+top10品类
+随机抽取的session
+top10活跃session
+
+
+./SprakProject/src/test/java/com/erik/sprakproject/AppTest.java
