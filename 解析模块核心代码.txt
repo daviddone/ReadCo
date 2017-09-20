@@ -1,0 +1,63 @@
+LteMroXmlParse.java
+LteMroXmlParse.read()方法
+	gridUeMap：
+	userTypeMap: 用户类型map
+	gridInfoMap: 栅格信息map
+	
+	MrIdxInfo  len长度 就是原始数据smr的长度，mapIdx集合 将smr的数据存放在mapIdx的集合中，dataFlag类型：主小区scrsrp,scrip代表不同的int。
+			   获取到mapIdx中某个元素的索引位置，mapIdx是否包含某个元素。
+	MrKeyInfo  变量：_id通过objectCellId获得， _mmeCode 时间戳等。subFrame？，eventType。
+			   公共方法：
+			   getObjCellId通过id和enbid计算出objectCellId, object原始数据有不同的id，
+			   getMrokey 通过原始数据的_mmeCode + 处理之后的_id获得。
+			   getTimeStamp 获取时间戳
+			   getCell 获取_id
+    xmlCommonInfo 变量：原始数据fileHeader标签下的_reportTime，_startTime，结束时间_endTime 通过计算方法获得。
+				  公共方法： 
+				  setHeader设置头部变量
+				  setEnb 设置_enbId和_userLabel
+				  getLine: 获得上报时间等
+				  getAllLine： 获取上报时间等+ enbid等
+	
+    IniParseDomain  变量：ini文件路径，本地 hdfs类别，编码和计算的路径。
+					iniMap key:cell，value:LteIniInfo, cell为ini第1,2。     LteIniInfo：变量：earfcn pci intId 经纬度，regionId，cityId，小区名字，
+					iniAdjMap                                                           公共方法：getKeyLine 获取拼接字符串
+					gsmIniAdjMap key:bsicBcch,value:List<GsmIniInfo>   数据从parseGsmIniFile来    GsmIniInfo:经纬度，int_id
+					私有方法：
+					parseIniHdfs 解析数据 parseIniFile parseGsmIniFile解析不同类型数据。
+	iniInfoMap：key:   value:LteNcIniInfo       
+	gsmIniInfoMap: key:  value:GsmNcIniInfo
+	
+	
+	MrParseDomain	公共方法：
+					parseFileHeader： 解析数据 设置xmlCommonInfo的header
+					parseEnb：解析enb，设置xmlCommonInfo的enb。
+					parseSmr 解析smr，设置MrIdxInfo的mapIdx
+					
+	MroUserParseDomain 公共方法：
+	                   parse：通过userTypeMap，MrParseDomain，enodeb，IniParseDomain解析smr，v等数据。
+					   
+   MroSumParseDomain   变量
+			私有方法：
+			makeEutrInfo(TdlMroGridUe, TdlMroData)
+			makeGridInfo(TdlMroGridUe, MroGridInfo, TdlMroData)
+			makeGridUserInfo(TdlMroGridUe, MroGridInfo, TdlMroData, int)
+			makeAdjInfo(LteNcIniInfo, TdlMroGridUe, MroGridInfo, int, TdlMroData)
+			makeGridAdjInfo(String, TdlMroGridUe, MroGridInfo, int, TdlMroData, int)
+			makeGsmAdjInfo(GsmNcIniInfo, TdlMroGridUe, int, TdlMroData)
+			judgeEutrTabs()
+			judgeGridUserTabs()
+			judgeAdjTabs()
+			judgeGsmAdjTabs()
+			
+			公共方法：
+			getData(String)获取到TdlMroData，
+			sum(TdlMroGridUe, MroGridInfo, TdlMroData, List<Integer>)： 
+					调用makeEutrInfo() makeGridInfo  makeGridUserInfo  makeGridUserInfo 
+					ncCellList:LteNcIniInfo每一个调用makeAdjInfo，makeGridAdjInfo，makeGridAdjInfo
+					ncGsmList：GsmNcIniInfo 每一个调用makeGsmAdjInfo
+			sumRip(String[], MrIdxInfo, TdlMroData) 调用：TdlMroData.makeRipInfo
+			
+			addData(String, TdlMroData): 存储mapTdlData:key:cellKey,value:TdlMroData
+			write(StringBuffer, Map<String, GridInfo>)
+				WriteTdlMroSumDomain:输出tdl的各种类型的表。

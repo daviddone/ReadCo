@@ -37,11 +37,11 @@
 											writeGridUeData(Map<String, Map<String, TdlMroGridUe>> gridUeMap, Map<String, Integer> userTypeMap, MroSumParseDomain sumParse, XmlCommonInfo xmlCommonInfo,
 											String timeStamp, Map<String, GridInfo> gridInfoMap, Map<String, LteNcIniInfo> iniInfoMap, Map<String, GsmNcIniInfo> gsmIniInfoMap)
 											
-./parse/domainmodel/mro/MroSumParseDomain.java
-./parse/domainmodel/mro/MroUserParseDomain.java
-./parse/domainmodel/mro/WriteTdlMroSumDomain.java
-./parse/domainmodel/MrParseDomain.java
-./parse/domainmodel/mrs/LteMrsXmlParse.java
+./parse/domainmodel/mro/MroSumParseDomain.java    
+./parse/domainmodel/mro/MroUserParseDomain.java   
+./parse/domainmodel/mro/WriteTdlMroSumDomain.java 
+./parse/domainmodel/MrParseDomain.java            
+./parse/domainmodel/mrs/LteMrsXmlParse.java	      
 ./parse/domainmodel/mrs/MrsSumParseDomain.java
 ./parse/domainmodel/mrs/WriteTdlMrsSumDomain.java
 ./parse/domainmodel/XmlParseStream.java
