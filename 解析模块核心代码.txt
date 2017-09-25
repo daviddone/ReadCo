@@ -1,17 +1,20 @@
 LteMroXmlParse.java
 LteMroXmlParse.read()方法
-	gridUeMap：
-	userTypeMap: 用户类型map
+	gridUeMap  ：key: cellKey,来源MrKeyInfo中的_id，value：userGridUe此为map：userKey,来源mrKeyInfo中_mmeCode等数据，value:TdlMroGridUe。初始化设置gridue的邻区数据。
+				TdlMroGridUe: 包含了一个主小区对应的所有邻区的和。
+				    公共方法：
+					makeNcRsrpValue： 解析一条ncEarfcnPci，初始化一条LteNcInfo  来源于解析v的时候，makeGridUeData
+	userTypeMap: 用户类型map,key: 
 	gridInfoMap: 栅格信息map
-	
+	P
 	MrIdxInfo  len长度 就是原始数据smr的长度，mapIdx集合 将smr的数据存放在mapIdx的集合中，dataFlag类型：主小区scrsrp,scrip代表不同的int。
 			   获取到mapIdx中某个元素的索引位置，mapIdx是否包含某个元素。
-	MrKeyInfo  变量：_id通过objectCellId获得， _mmeCode 时间戳等。subFrame？，eventType。
+	MrKeyInfo  变量：_id通过objectCellId获得 ， _mmeCode 时间戳等。subFrame？，eventType。
 			   公共方法：
 			   getObjCellId通过id和enbid计算出objectCellId, object原始数据有不同的id，
 			   getMrokey 通过原始数据的_mmeCode + 处理之后的_id获得。
 			   getTimeStamp 获取时间戳
-			   getCell 获取_id
+			   getCell 获取_id  ,id/256 | id%256
     xmlCommonInfo 变量：原始数据fileHeader标签下的_reportTime，_startTime，结束时间_endTime 通过计算方法获得。
 				  公共方法： 
 				  setHeader设置头部变量
@@ -20,13 +23,13 @@ LteMroXmlParse.read()方法
 				  getAllLine： 获取上报时间等+ enbid等
 	
     IniParseDomain  变量：ini文件路径，本地 hdfs类别，编码和计算的路径。
-					iniMap key:cell，value:LteIniInfo, cell为ini第1,2。     LteIniInfo：变量：earfcn pci intId 经纬度，regionId，cityId，小区名字，
+					iniMap key:cell，value:LteIniInfo, cell为ini数据每行的第1,2。     LteIniInfo：变量：earfcn pci intId 经纬度，regionId，cityId，小区名字，
 					iniAdjMap                                                           公共方法：getKeyLine 获取拼接字符串
 					gsmIniAdjMap key:bsicBcch,value:List<GsmIniInfo>   数据从parseGsmIniFile来    GsmIniInfo:经纬度，int_id
 					私有方法：
 					parseIniHdfs 解析数据 parseIniFile parseGsmIniFile解析不同类型数据。
-	iniInfoMap：key:   value:LteNcIniInfo       
-	gsmIniInfoMap: key:  value:GsmNcIniInfo
+	iniInfoMap：key为：_id| earfcnpci   value:LteNcIniInfo       
+	gsmIniInfoMap: key: mCell + _splitStr + bsicBcch;   value:GsmNcIniInfo
 	
 	
 	MrParseDomain	公共方法：
@@ -59,5 +62,12 @@ LteMroXmlParse.read()方法
 			sumRip(String[], MrIdxInfo, TdlMroData) 调用：TdlMroData.makeRipInfo
 			
 			addData(String, TdlMroData): 存储mapTdlData:key:cellKey,value:TdlMroData
-			write(StringBuffer, Map<String, GridInfo>)
+			write(StringBuffer, Map<String, GridInfo>) ：够着gridinfomap:
 				WriteTdlMroSumDomain:输出tdl的各种类型的表。
+				
+	writeGridUeData： 初始化MroGridInfo，里面包含相关栅格信息。		
+				      公共方法：
+					  makeGrid：gridue中拿到所有的邻区lteNcList，通过cellKey= 256/|256%,每个邻区的earfcnpci,(找到其邻区的cellId和距离,构造每个LteNcIniInfo)。同时赋值邻区iniInfoMap。
+					  邻区iniInfoMap的key为：_id| earfcnpci。 
+					  
+					            
